@@ -1,0 +1,19 @@
+name: Maintenance checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install check dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes shellcheck jq
+      - name: Check shell syntax and lint
+        run: |
+          for script in scripts/check.sh tests/check.sh; do bash -n "$script"; done
+          shellcheck scripts/check.sh tests/check.sh
+      - name: Run offline fixtures
+        run: bash tests/check.sh

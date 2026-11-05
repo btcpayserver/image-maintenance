@@ -1,0 +1,6 @@
+[submodule "submodules/lnd"]
+	path = submodules/lnd
+	url = git@github.com:btcpayserver/lnd.git
+[submodule "submodules/lightning"]
+	path = submodules/lightning
+	url = git@github.com:btcpayserver/lightning.git
