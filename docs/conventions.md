@@ -151,9 +151,10 @@ For the deployment PR:
   `docs/supported-images.md` with `contrib/DockerFileBuildHelper/update-repo.sh`;
   do not hand-edit generated sections or run the generated build-all script.
    Update verified source mappings only when needed.
-- Open as draft, link both integration PRs and validation evidence, and request
-  release-maintainer review (`@NicolasDorier` and `@Pavlenex`). Require Docker
-  repository CI too.
+- Open ready for review, link both integration PRs and related release notes,
+  and request release-maintainer review (`@rockstardev` for LND,
+  `@NicolasDorier` for Core Lightning).
+  Require Docker repository CI too.
 - Never run `.github/scripts/test-install.sh` on a development machine: it removes
   the host Docker installation and belongs on disposable CI runners.
 
@@ -161,10 +162,18 @@ No step grants automatic merge or deployment authority. After the project's
 release-history maintenance, restore the original submodule pin unless proposing
 a reviewed pin update to verified published source. Never pin an unmerged PR tip.
 
-Keep PR titles and descriptions consistent across images: summary of meaningful
-changes, upstream/source/image links, compatibility actions when required, and
-validation evidence (or a link to it). Downstream repository-specific PR policies
-take precedence. Capitalize the first word of prose bullets.
+### Image-bump PR descriptions
+
+- **Library and Core:** Keep the description to one brief sentence, such as
+  "Bump the LND test images to `v0.21.6-beta-1`." Do not explain the rollout or
+  cross-link the other PRs.
+- **btcpayserver-docker:** State the new image version and what it brings users.
+  Keep it to the point, without tests, validation or CI commentary. Links to the
+  Library/Core PRs and related release notes or fixes are welcome.
+- **image-maintenance:** Briefly state the pin update and link the downstream PRs.
+
+Keep required validation evidence in the coordinating release issue or comments,
+not in these PR descriptions. Capitalize the first word of prose bullets.
 
 ## Failure recovery
 
