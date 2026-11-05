@@ -59,7 +59,7 @@ Preserve these resources and behavior:
   Makefile/Dockerfile adaptations.
 - File-based Bitcoin RPC credentials, safe password migration and native macaroon
   rotation. Inspect the current overlay's scripts and tests to preserve their
-  behavior, then run the startup regression suite described below.
+   behavior. Use CI for startup regression coverage; local validation is optional.
 
 Complete the [shared patch review](conventions.md#naming-and-patch-review), then
 run `bash -n` on both startup scripts and the test script.
@@ -84,7 +84,12 @@ toolchain. `GOTOOLCHAIN=local` means an older image will not download a new one.
 Verify base image availability for every target; do not assume an upstream Go
 bump automatically updated our architecture-specific Dockerfiles.
 
-## 3. Build and test before tagging
+## 3. Optional local validation
+
+Local builds and startup validation are not required before tagging or publishing.
+Use publishing CI to build all three architectures and startup CI for regression
+coverage. The commands below are available for optional local troubleshooting;
+do not run them as a routine release prerequisite.
 
 ```bash
 docker build --pull -t local-lnd:test -f linuxamd64.Dockerfile .
@@ -99,7 +104,8 @@ bash btcpay/test-startup-tests.sh
 
 If ARM emulation is missing, obtain approval before host-wide privileged
 registration: `docker run --privileged --rm tonistiigi/binfmt --install arm64,arm`.
-Test amd64 and at least one ARM locally; publication must validate all three.
+Local architecture checks are optional; verify all three published architectures
+after publishing as described in the shared publication procedure.
 
 Startup tests require a Linux Docker host, curl and jq. They create disposable
 regtest nodes, funded channels, networks and volumes, then clean them up. The

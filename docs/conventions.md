@@ -66,7 +66,9 @@ Privileged binfmt registration changes the host: confirm it is acceptable first.
 Before publishing:
 
 1. Record exact upstream, overlay commits, intended source SHA and image tag.
-2. Complete the project's builds, regression tests and executable smoke tests.
+2. Review available CI evidence for the selected source. Local builds, startup
+   validation and regression suites are optional, not prerequisites for publishing.
+   Use CI for builds and tests; verify the resulting artifacts after publication.
 3. Review checks AND inline review comments; resolve valid findings.
 4. Confirm the tag is absent locally/remotely and the registry tag is unused.
 5. Confirm the fork's current publishing workflow, secret names and repository
@@ -125,8 +127,8 @@ changes (including required generated files), commit and push them, open the PR,
 then validate through CI on the current PR head. Inspect logs for the intended
 image and executed project tests; fix failures rather than disabling tests.
 Old-image green CI is not evidence for the new image. Do not set up a local
-deployment or run local integration suites for these PRs; image-build and
-project-specific release tests remain prerequisites.
+deployment or run local integration suites for these PRs; successful image
+publication and project-specific post-publication checks remain prerequisites.
 
 Proceed in this order:
 

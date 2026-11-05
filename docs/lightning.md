@@ -69,7 +69,11 @@ Follow inherited CLN changelog conventions on PRs. Documentation-only changes
 need `Changelog-None` in the PR description or a commit message; otherwise
 pre-build checks stop before validating anything else.
 
-## 3. Build and test
+## 3. Optional local validation
+
+Local builds and startup/regression validation are not required before publishing.
+Use CI for builds and relevant regression/integration checks. The commands below
+are available for optional local troubleshooting, not as release prerequisites.
 
 ```bash
 docker buildx build --platform linux/amd64 --pull --load -t local-cln:test .
@@ -78,9 +82,9 @@ docker buildx build --platform linux/arm64 --pull --load -t local-cln:test-arm64
 docker run --rm --platform linux/arm64 --entrypoint lightningd local-cln:test-arm64 --version
 ```
 
-Test at least amd64 and one ARM locally. Obtain approval for privileged binfmt
-registration if needed. Verify upstream's build dependencies and runtime packaging
-on all targets. Run relevant regression/integration checks for changed behavior;
+Obtain approval for privileged binfmt registration if local testing needs it.
+Verify upstream's build dependencies and runtime packaging on all published
+targets. Use relevant CI regression/integration checks for changed behavior;
 a version smoke test alone does not validate startup or RPC credential handling.
 
 ## 4. Replace btcpaymaster only with explicit approval
