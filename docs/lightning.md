@@ -69,25 +69,7 @@ Follow inherited CLN changelog conventions on PRs. Documentation-only changes
 need `Changelog-None` in the PR description or a commit message; otherwise
 pre-build checks stop before validating anything else.
 
-## 3. Optional local validation
-
-Local builds and startup/regression validation are not required before publishing.
-Use CI for builds and relevant regression/integration checks. The commands below
-are available for optional local troubleshooting, not as release prerequisites.
-
-```bash
-docker buildx build --platform linux/amd64 --pull --load -t local-cln:test .
-docker run --rm --entrypoint lightningd local-cln:test --version
-docker buildx build --platform linux/arm64 --pull --load -t local-cln:test-arm64 .
-docker run --rm --platform linux/arm64 --entrypoint lightningd local-cln:test-arm64 --version
-```
-
-Obtain approval for privileged binfmt registration if local testing needs it.
-Verify upstream's build dependencies and runtime packaging on all published
-targets. Use relevant CI regression/integration checks for changed behavior;
-a version smoke test alone does not validate startup or RPC credential handling.
-
-## 4. Replace btcpaymaster only with explicit approval
+## 3. Replace btcpaymaster only with explicit approval
 
 After review, record the approved source SHA and the remote branch SHA being
 replaced. The reviewed preparation branch is the replacement source; no hard
@@ -106,7 +88,7 @@ since review, stop and inspect them rather than refreshing the lease blindly.
 Keep a reference to the previous tip for recovery. Close the review PR with the
 replacement SHA after the approved rewrite; do not use GitHub's merge button.
 
-## 5. Core Lightning publication settings
+## 4. Core Lightning publication settings
 
 Follow [shared publication](conventions.md#publication) with the captured `VERSION`
 and these settings:
@@ -125,7 +107,7 @@ Verify the repository variable; do not change credentials as part of a routine
 bump. Version output can include `basedon-` because the Makefile derives it from
 the Git tag.
 
-## 6. Core Lightning downstream references
+## 5. Core Lightning downstream references
 
 Follow the [shared downstream process](conventions.md#downstream-updates) using:
 

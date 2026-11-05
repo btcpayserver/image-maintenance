@@ -59,7 +59,7 @@ Preserve these resources and behavior:
   Makefile/Dockerfile adaptations.
 - File-based Bitcoin RPC credentials, safe password migration and native macaroon
   rotation. Inspect the current overlay's scripts and tests to preserve their
-   behavior. Use CI for startup regression coverage; local validation is optional.
+  behavior.
 
 Complete the [shared patch review](conventions.md#naming-and-patch-review), then
 run `bash -n` on both startup scripts and the test script.
@@ -84,38 +84,7 @@ toolchain. `GOTOOLCHAIN=local` means an older image will not download a new one.
 Verify base image availability for every target; do not assume an upstream Go
 bump automatically updated our architecture-specific Dockerfiles.
 
-## 3. Optional local validation
-
-Local builds and startup validation are not required before tagging or publishing.
-Use publishing CI to build all three architectures and startup CI for regression
-coverage. The commands below are available for optional local troubleshooting;
-do not run them as a routine release prerequisite.
-
-```bash
-docker build --pull -t local-lnd:test -f linuxamd64.Dockerfile .
-docker buildx build --platform linux/arm64 --pull --load \
-  -t local-lnd:test-arm64 -f linuxarm64v8.Dockerfile .
-docker run --rm --entrypoint lnd local-lnd:test --version
-docker run --rm --entrypoint loop local-lnd:test --version
-docker run --rm --platform linux/arm64 --entrypoint lnd local-lnd:test-arm64 --version
-bash btcpay/test-startup-tests.sh --list
-bash btcpay/test-startup-tests.sh
-```
-
-If ARM emulation is missing, obtain approval before host-wide privileged
-registration: `docker run --privileged --rm tonistiigi/binfmt --install arm64,arm`.
-Local architecture checks are optional; verify all three published architectures
-after publishing as described in the shared publication procedure.
-
-Startup tests require a Linux Docker host, curl and jq. They create disposable
-regtest nodes, funded channels, networks and volumes, then clean them up. The
-suite mounts the checkout's scripts. Inspect its `IMAGE` selection to determine
-which binary it tests; do not assume it uses the newly built image. If the script
-assigns `IMAGE` unconditionally, setting an environment variable will not override
-it: make and review an explicit test-script change instead. Keep CI scenario
-groups aligned with `--list`.
-
-## 4. LND publication settings
+## 3. LND publication settings
 
 Follow [shared publication](conventions.md#publication) with the captured `VERSION`
 and these settings:
@@ -142,7 +111,7 @@ If expected CI does not appear, inspect Actions settings: inherited upstream
 workflows may be disabled separately.
 Deleting CircleCI configuration alone does not disconnect its integration.
 
-## 5. Test the published image's startup
+## 4. Test the published image's startup
 
 Before [downstream updates](conventions.md#downstream-updates), repeat the full
 startup suite against the **new published image**. Select the new tag through the
@@ -154,7 +123,7 @@ and retain source/run evidence. Keep mounted startup scripts identical to the
 release, and verify the scripts packaged in the image separately. Clean up only
 that temporary branch after validation; do not modify the published source/tag.
 
-## 6. LND downstream references
+## 5. LND downstream references
 
 Follow the [shared downstream process](conventions.md#downstream-updates) using:
 
@@ -162,7 +131,7 @@ Follow the [shared downstream process](conventions.md#downstream-updates) using:
 - Core: `merchant_lnd` and `customer_lnd` in each shared Compose path.
 - Deployment: `docker-compose-generator/docker-fragments/bitcoin-lnd.yml`.
 
-## 7. Maintain master
+## 6. Maintain master
 
 LND uses version branches plus merges into `master`; do not rewrite it to mimic
 Core Lightning. Preserve references to intervening releases and review the merge

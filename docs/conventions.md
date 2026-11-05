@@ -66,14 +66,11 @@ Privileged binfmt registration changes the host: confirm it is acceptable first.
 Before publishing:
 
 1. Record exact upstream, overlay commits, intended source SHA and image tag.
-2. Review available CI evidence for the selected source. Local builds, startup
-   validation and regression suites are optional, not prerequisites for publishing.
-   Use CI for builds and tests; verify the resulting artifacts after publication.
-3. Review checks AND inline review comments; resolve valid findings.
-4. Confirm the tag is absent locally/remotely and the registry tag is unused.
-5. Confirm the fork's current publishing workflow, secret names and repository
+2. Review checks AND inline review comments; resolve valid findings.
+3. Confirm the tag is absent locally/remotely and the registry tag is unused.
+4. Confirm the fork's current publishing workflow, secret names and repository
    configuration; do not copy credentials here or standardize secrets casually.
-6. Verify the annotated release tag peels to the approved source commit.
+5. Verify the annotated release tag peels to the approved source commit.
 
 Both forks publish from `basedon-*` tag pushes, not ordinary branch pushes. Set
 `PROJECT` (`lnd` or `lightning`), `WORKFLOW` (from the project guide), `VERSION`
